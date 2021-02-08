@@ -34,6 +34,7 @@ describe('http-server-streams/file-server-delete', () => {
             'http://localhost:3001/small.png',
             {method: 'DELETE'},
             (response) => {
+              console.log(`response.statusCode= ${response.statusCode}`);
               expect(response.statusCode).to.equal(200);
 
               setTimeout(() => {
