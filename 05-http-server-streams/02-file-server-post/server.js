@@ -36,8 +36,6 @@ server.on('request', (req, res) => {
           res.statusCode = 500;
           res.end('unknown error');
         }
-
-        writeStream.destroy();
       });
       
       writeStream.on('finish', () => {
@@ -49,17 +47,14 @@ server.on('request', (req, res) => {
         if (deleteFlag) {
           fs.unlink(filepath, () => {});
         }
-        
-        res.destroy();
       });
       
       limitSizeStream.on('error', () => {
         deleteFlag = true;
         res.statusCode = 413;
         res.end('large request body');
-        limitSizeStream.destroy();
         writeStream.destroy();
-        res.destroy();
+        // req.destroy();
       });
 
       req.pipe(limitSizeStream).pipe(writeStream);
