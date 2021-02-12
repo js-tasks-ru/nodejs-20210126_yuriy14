@@ -2,6 +2,14 @@ const path = require('path');
 const Koa = require('koa');
 const app = new Koa();
 
+app.use(async (ctx, next) => {
+    try {
+        await next();
+    } catch (error) {
+        ctx.body = 'something error!';
+    }
+});
+
 app.use(require('koa-static')(path.join(__dirname, 'public')));
 app.use(require('koa-bodyparser')());
 
