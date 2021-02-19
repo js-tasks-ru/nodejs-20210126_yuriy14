@@ -52,6 +52,7 @@ server.on('request', (req, res) => {
       limitSizeStream.on('error', () => {
         deleteFlag = true;
         res.statusCode = 413;
+        res.setHeader('Connection', 'close');
         res.end('large request body');
         writeStream.destroy();
         // req.destroy();
