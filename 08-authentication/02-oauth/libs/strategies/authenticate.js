@@ -12,9 +12,7 @@ module.exports = async function authenticate(strategy, email, displayName, done)
       return done(null, user);
     }
 
-    user = await User.create({
-      email, displayName,
-    });
+    user = await User.create({email, displayName});
     done(null, user);
   } catch (err) {
     done(err);
