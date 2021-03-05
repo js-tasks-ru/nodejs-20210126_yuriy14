@@ -63,14 +63,7 @@ module.exports.register = async (ctx, next) => {
 };
 
 module.exports.confirm = async (ctx, next) => {
-    let verificationToken;
-
-    const {referer} = ctx.request.header;
-    if (referer) {
-        [,verificationToken] = referer.split('/confirm/');
-    } else {
-        verificationToken = ctx.request.body.verificationToken;
-    }
+    const {verificationToken} = ctx.request.body;
     
     const user = await User.findOneAndUpdate(
         {verificationToken}, 
