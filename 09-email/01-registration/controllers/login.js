@@ -1,4 +1,5 @@
 const passport = require('../libs/passport');
+const User = require('../models/User');
 
 module.exports.login = async function login(ctx, next) {
   await passport.authenticate('local', async (err, user, info) => {
@@ -7,6 +8,13 @@ module.exports.login = async function login(ctx, next) {
     if (!user) {
       ctx.status = 400;
       ctx.body = {error: info};
+      return;
+    }
+
+    const {verificationToken} = user;
+    if (verificationToken) {
+      ctx.status = 400;
+      ctx.body = {error: 'Подтвердите email'};
       return;
     }
 
