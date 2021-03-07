@@ -11,9 +11,8 @@ module.exports.login = async function login(ctx, next) {
       return;
     }
 
-    const {email} = user;
-    const u = await User.findOne({email});
-    if (u && u.verificationToken) {
+    const {verificationToken} = user;
+    if (verificationToken) {
       ctx.status = 400;
       ctx.body = {error: 'Подтвердите email'};
       return;

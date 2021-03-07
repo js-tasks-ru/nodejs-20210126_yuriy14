@@ -11,7 +11,6 @@ module.exports.register = async (ctx, next) => {
     try {
         const userInDb = await User.findOne({email});
         if (userInDb) {
-            console.log('Такой email уже существует');
             ctx.status = 400;
             ctx.body =  {errors: {email: 'Такой email уже существует'} } 
             return;
@@ -33,28 +32,8 @@ module.exports.register = async (ctx, next) => {
     }
 
     const u = new User(user);
-
-    try {
-        await u.setPassword(password);
-        await u.save();
-    } catch (err) {
-        if (err.name === 'ValidationError') {
-            const errors = {};
-
-            for (const field of Object.keys(err.errors)) {
-                errors[field] = err.errors[field].message;
-            }
-
-            console.log(errors);
-
-            ctx.status = 400;
-            ctx.body = {errors};
-            return;
-        }
-
-        console.log(err);
-        throw err;
-    }
+    await u.setPassword(password);
+    await u.save();
 
     await sendMail(options);
     console.log(`http://localhost:3000/confirm/${verificationToken}`);
